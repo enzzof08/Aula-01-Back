@@ -43,6 +43,16 @@
    OU  -> OR  -> ||
    NAO -> NOT -> !
 
+
+   isNaN -> permite analisar se o conteúdo não é número para retornar verdadeiro ou falso
+
+   parseInt() -> Permite converter um conteúdo em numero do tipo INTEIRO
+   parseFloat() -> Permite converter um conteúdo em numero do tipo DECIMAL
+   Number() -> Permite converter um conteúdo para NUMERO, podendo ser inteiro ou decimal
+   Boolean() - > Permite converter um conteúdo para BOOLEANO (true ou false)
+
+   typeof() -> Retorna o tipo de dados de uma variável (String, Number, Boolean ou Object)
+
  */
 
 
@@ -77,12 +87,35 @@ entradaDeDados.question('Digite o nome do aluno: ', function(nome){
                     //Validação de entrada vazia
                     if(nomeAluno == '' || nota1 == '' || nota2 == '' || nota3 == '' || nota4 == ''){
                         console.log('ERRO: Campos obrigatórios nao foram prechidos')
+                       
                         //Validação de entrade do limite de numeros
                     }else if (nota1<0 || nota1>100 || nota2<0 || nota2>100 || nota3<0 || nota3>100 || nota4<0 || nota4>100){
                         console.log('ERRO: As notas devem ser de 0 até 100')
-                        //Validação de entrade de somente numero
+                        
+                        //Validação de entrade de somente numero (isNaN)
                     }else if(isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
                         console.log('ERRO: Somente numeros são permitidos na entrada das notas')
+
+                    }else{       
+                        //Calculo da média       
+                        let media = (Number (nota1) + Number (nota2) + Number(nota3) + Number(nota4))/4
+
+                        let statusAluno
+
+                        //Validação do status do aluno
+                        if( media < 50){
+                            statusAluno = 'REPROVADO'
+
+                        }else if(media >= 50 && media < 70){
+                            statusAluno = 'RECUPERÇÃO'
+
+                        }else if(media >= 70){
+                            statusAluno = 'APROVADO'
+                        }
+
+                        //Mostrar média com o numero fixado de dois números após o ponto
+                        console.log('O aluno(a): ' + nomeAluno +  '\nTeve a média final em: ' + media.toFixed(2) + '\nStatus de Aprovação: '+ statusAluno)
+                        
                     }
                 })
             })
