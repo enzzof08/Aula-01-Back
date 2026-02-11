@@ -83,8 +83,6 @@ entradaDeDados.question('Digite o nome do aluno: ', function(nome){
                 entradaDeDados.question('Digite a nota4: ', function(valor4){
                     let nota4 = valor4
 
-                    let calculos = require('./modulo/mcalculo.js')
-
 
                     //Validação de entrada vazia
                     if(nomeAluno == '' || nota1 == '' || nota2 == '' || nota3 == '' || nota4 == ''){
@@ -98,15 +96,25 @@ entradaDeDados.question('Digite o nome do aluno: ', function(nome){
                     }else if(isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
                         console.log('ERRO: Somente numeros são permitidos na entrada das notas')
 
-                    }else{   
-                        let media = calculos.calcularMedia(valor1, valor2, valor3, valor4)
-                        console.log(media)
+                    }else{       
+                        //Calculo da média       
+                        let media = (Number (nota1) + Number (nota2) + Number(nota3) + Number(nota4))/4
 
-                        let statusAluno = calculos.validacaoStatus(media)
-                        console.log(statusAluno)
+                        let statusAluno
+
+                        //Validação do status do aluno
+                        if( media < 50){
+                            statusAluno = 'REPROVADO'
+
+                        }else if(media >= 50 && media < 70){
+                            statusAluno = 'RECUPERÇÃO'
+
+                        }else if(media >= 70){
+                            statusAluno = 'APROVADO'
+                        }
 
                         //Mostrar média com o numero fixado de dois números após o ponto
-                        //console.log('O aluno(a): ' + nomeAluno +  '\nTeve a média final em: ' + media.toFixed(2) + '\nStatus de Aprovação: '+ statusAluno)
+                        console.log('O aluno(a): ' + nomeAluno +  '\nTeve a média final em: ' + media.toFixed(2) + '\nStatus de Aprovação: '+ statusAluno)
                         
                     }
                 })
