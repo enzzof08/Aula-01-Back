@@ -19,16 +19,16 @@ function calcularMedia (valor1, valor2, valor3, valor4){
 function validacaoStatus(media){
     let statusAluno
 
-    let media = calcularMedia(valor1, valor2, valor3, valor4)
+    let mediaReal = Number(media)
 
     //Validação do status do aluno
-    if( mediaM < 50){
+    if( mediaReal < 50){
         statusAluno = 'REPROVADO'
 
-    }else if(mediaM >= 50 && mediaM < 70){
+    }else if(mediaReal >= 50 && mediaM < 70){
         statusAluno = 'RECUPERÇÃO'
 
-    }else if(mediaM >= 70){
+    }else if(mediaReal >= 70){
         statusAluno = 'APROVADO'
     }
     return statusAluno

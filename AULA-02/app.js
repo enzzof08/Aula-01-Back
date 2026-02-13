@@ -100,13 +100,11 @@ entradaDeDados.question('Digite o nome do aluno: ', function(nome){
 
                     }else{   
                         let media = calculos.calcularMedia(valor1, valor2, valor3, valor4)
-                        console.log(media)
-
+                        
                         let statusAluno = calculos.validacaoStatus(media)
-                        console.log(statusAluno)
 
                         //Mostrar média com o numero fixado de dois números após o ponto
-                        //console.log('O aluno(a): ' + nomeAluno +  '\nTeve a média final em: ' + media.toFixed(2) + '\nStatus de Aprovação: '+ statusAluno)
+                        console.log('O aluno(a): ' + nomeAluno +  '\nTeve a média final em: ' + media.toFixed(2) + '\nStatus de Aprovação: '+ statusAluno)
                         
                     }
                 })
