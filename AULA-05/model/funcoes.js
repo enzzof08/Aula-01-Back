@@ -114,7 +114,8 @@ module.exports = {
     getDadosEstado,
     getCapitalEstado,
     getEstadosRegiao,
-    getCapitalPais
+    getCapitalPais,
+    getCidades
 }
 
 //console.log(getListaDeEstados())
