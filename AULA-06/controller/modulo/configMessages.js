@@ -16,8 +16,10 @@ const DEFAULT_MESSAGE = {
 }
 
 //Mensagens de ERRO do projeto de filmes
-const ERROR_BAD_REQUEST = {status: false, status_code: 400, message: 'Não foi possível processar a requisição devido a erros de entrada '}
-const ERROR_INTERNAL_SERVER_MODEL = {status: false, status_code: 500, message: 'Não foi possível processar a requisição devido a um erro interno no servidor [MODEL]'}
+const ERROR_BAD_REQUEST                = {status: false, status_code: 400, message: 'Não foi possível processar a requisição devido a erros de entrada '}
+const ERROR_INTERNAL_SERVER_MODEL      = {status: false, status_code: 500, message: 'Não foi possível processar a requisição devido a um erro interno no servidor [MODEL]'}
+const ERROR_INTERNAL_SERVER_CONTROLLER = {status: false, status_code: 500, message: 'Não foi possível processar a requisição devido a um erro interno no servidor [CONTROLLER]'}
+const ERROR_CONTENT_TYPE               = {status: false, status_code: 415, message: 'Não foi possível processar a requisição de dados encaminhado pois não é suportado pelo servidor, apenas deve ser utilizado JSON.'}
 
 //Mensagens de SUCESSO do projeto de filmes
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Item inserido com sucesso!'}
@@ -26,5 +28,7 @@ module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
     SUCCESS_CREATED_ITEM,
-    ERROR_INTERNAL_SERVER_MODEL
+    ERROR_INTERNAL_SERVER_MODEL,
+    ERROR_CONTENT_TYPE,
+    ERROR_INTERNAL_SERVER_CONTROLLER
 }
