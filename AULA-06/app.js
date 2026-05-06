@@ -66,8 +66,6 @@ app.put('/v1/senai/locadora/filme/:id',bodyParserJSON, async function(request, r
     //Recebe os dados do body, que serão modificados no BD
     let dados = request.body
 
-    console.log(contentType)
-
     //Chama a função para atualizar o filme, devemos encaminhar as 3 variáveis na mesma sequencia que a função foi criada
     let result = await controllerFilme.atualizarFilme(dados, id, contentType)
 
@@ -77,6 +75,16 @@ app.put('/v1/senai/locadora/filme/:id',bodyParserJSON, async function(request, r
 
 })
 
+app.delete('/v1/senai/locadora/filme/:id', async function(request, response){
+    let id = request.params.id
+
+    let result = await controllerFilme.excluirFilme(id)
+
+    response.status(result.status_code)
+    response.json(result)
+
+
+})
 
 //Fazer o Start na API (aguardando as requisições)
 app.listen(8080, function () {

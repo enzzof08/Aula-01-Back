@@ -25,7 +25,9 @@ const ERROR_NOT_FOUND                  = {status: false, status_code: 404, messa
 //Mensagens de SUCESSO do projeto de filmes
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Item inserido com sucesso!'}
 const SUCCESS_RESPONSE     = {status: true, status_code: 200}
-const SUCESS_UPDATE_ITEM   = {status: true, status_code: 200, message: 'Item atualizado com sucesso!'}
+const SUCCESS_UPDATE_ITEM   = {status: true, status_code: 200, message: 'Item atualizado com sucesso!'}
+const SUCCESS_DELETED_ITEM   = {status: true, status_code: 200, message: 'Item excluído com sucesso!'}
+
 
 module.exports = {
     DEFAULT_MESSAGE,
@@ -36,5 +38,6 @@ module.exports = {
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_NOT_FOUND,
     SUCCESS_RESPONSE,
-    SUCESS_UPDATE_ITEM
+    SUCCESS_UPDATE_ITEM,
+    SUCCESS_DELETED_ITEM
 }
