@@ -63,9 +63,8 @@ const updateFilme = async function(filme){
                         where id            = ${filme.id};`
 
     let result = await knexConection.raw(sql)
-    
     if(result)
-        return result[0].insertId //Retorna o ID gerado no insert
+        return true
 
     else
         return false
