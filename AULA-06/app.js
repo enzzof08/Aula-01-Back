@@ -23,6 +23,7 @@ app.use(cors(corsOptions))
 
 //Import das controllers do projeto
 const controllerFilme = require('./controller/filme/controller_filme.js')
+const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
 
 //ENDPOINTS
 app.post('/v1/senai/locadora/filme',bodyParserJSON, async function(request, response){
@@ -84,6 +85,17 @@ app.delete('/v1/senai/locadora/filme/:id', async function(request, response){
     response.json(result)
 
 
+})
+
+app.post('/v1/senai/locadora/classificacao', bodyParserJSON, async function(request,response){
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerClassificacao.inserirNovaClassificacao(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
 })
 
 //Fazer o Start na API (aguardando as requisições)
