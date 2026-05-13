@@ -1,7 +1,7 @@
 /***************************************************************************************************************
  * Objetivo: Arquivo responsável pela validação, tratamento, manipulação de dados para realizar o CRUD de filme
  * Data: 17/04/2026
- * Autor: Marcel
+ * Autor: Enzzo
  * Versão: 1.0
  ***************************************************************************************************************/
 //Import do arquivo de configurações de mensagens do projeto
