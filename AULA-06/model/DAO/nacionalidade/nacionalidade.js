@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD de dados do genero no banco de dados
+ * Objetivo: Arquivo responsável pelo CRUD de dados da nacionalidade no banco de dados
  * Data: 15/05/2026
  * Autor: Enzzo
  * Versão: 1.0
@@ -11,12 +11,13 @@ const knexDatabaseConfig = require('../../database_config/knexConfig.js')
 
 const knexConection = knex(knexDatabaseConfig.development)
 
-const insertGenero = async function (dados) {
+
+const insertNacionalidade = async function (dados) {
     try {
-        let sql = `insert into tbl_genero (
-            genero
+        let sql = `insert into tbl_nacionalidade (
+            nacionalidade
         )values (
-            '${dados.genero}'
+            '${dados.nacionalidade}'
         );`
 
         let result = await knexConection.raw(sql)
@@ -32,11 +33,10 @@ const insertGenero = async function (dados) {
     }
 }
 
-
-const selectALLGenero = async function () {
+const selectALLNacionalidade = async function () {
     try {
 
-        let sql = 'select * from tbl_genero order by id desc;'
+        let sql = 'select * from tbl_nacionalidade order by id desc;'
 
         let result = await knexConection.raw(sql)
 
@@ -50,9 +50,9 @@ const selectALLGenero = async function () {
     }
 }
 
-const selectByIdGenero = async function(id){
+const selectByIdNacionalidade = async function(id){
     try {
-        let sql = `select * from tbl_genero where id=${id};`
+        let sql = `select * from tbl_nacionalidade where id=${id};`
 
         let result = await knexConection.raw(sql)
 
@@ -68,11 +68,11 @@ const selectByIdGenero = async function(id){
 
 }
 
-const updateGenero = async function(genero){
+const updateNacionalidade = async function(nacionalidade){
     try {
-        let sql = `update tbl_genero set
-        genero           = '${genero.genero}'
-        where id            = ${genero.id};`
+        let sql = `update tbl_nacionalidade set
+        nacionalidade           = '${nacionalidade.nacionalidade}'
+        where id            = ${nacionalidade.id};`
 
         let result = await knexConection.raw(sql)
         if(result){
@@ -84,29 +84,11 @@ const updateGenero = async function(genero){
         return false
     }
 }
-
-const deleteGenero = async function(id){
-    try {
-        let sql = `delete from tbl_genero where id=${id}`
-        let result = await knexConection.raw(sql)
-
-        if(result){
-            return true
-        }else{
-            return false
-        }
-    } catch (error) {
-        return false
-    }
-}
-
-
-
 
 module.exports = {
-    insertGenero,
-    selectALLGenero,
-    selectByIdGenero,
-    updateGenero,
-    deleteGenero
+    insertNacionalidade,
+    selectALLNacionalidade,
+    selectByIdNacionalidade,
+    updateNacionalidade
+
 }

@@ -19,7 +19,7 @@ const insertClassificacao = async function (classificacao) {
         let sql = `insert into tbl_classificacao (
             classificacao
         )values (
-            ${classificacao}
+            '${classificacao}'
         );`
 
         let result = await knexConection.raw(sql)
@@ -82,7 +82,6 @@ const selectByIdClassificacao = async function(id){
             return false
         }
     } catch (error) {
-        console.log('2')
         return false
     }
 }

@@ -11,25 +11,23 @@ const configMessages = require('../modulo/configMessages.js')
 const clasDAO = require('../../model/DAO/classificacao/classificacao.js')
 
 //Função para inserir uma novo classificacao
-const inserirNovaClassificacao = async function (classif, contentType) {
-    let classificacao = classif.classificacao
+const inserirNovaClassificacao = async function (dados, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validar = await validarDados(classificacao)
+            let validar = await validarDados(dados)
 
             if (validar) {
                 return validar
             } else {
-                let result = clasDAO.insertClassificacao(classificacao)
+                let result = await clasDAO.insertClassificacao(await tratarDados(dados))
 
                 if (result) {
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
-                    customMessage.DEFAULT_MESSAGE.response = classif
-
+                    customMessage.DEFAULT_MESSAGE.response = dados
                     return customMessage.DEFAULT_MESSAGE //201
                 } else {
                     return customMessage.ERROR_INTERNAL_SERVER_MODEL //500
@@ -50,7 +48,7 @@ const atualizarClassificacao = async function (dados, id, contentType) {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             let resultBuscarClassificacao = await buscarClassificacao(id)
             if (resultBuscarClassificacao.status) {
-                let validar = await validarDados(dados.classificacao)
+                let validar = await validarDados(dados)
 
                 if (!validar) {
                     dados.id = Number(id)
@@ -153,8 +151,9 @@ let customMessage = JSON.parse(JSON.stringify(configMessages))
     }
 }
 
-const validarDados = async function (classificacao) {
+const validarDados = async function (dados) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
+    let classificacao = dados.classificacao
 
     if(classificacao == undefined || classificacao == '' || classificacao == null || classificacao.length > 3){
         customMessage.ERROR_BAD_REQUEST.field = '[CLASSIFICAÇÃO] INVÁLIDO'
