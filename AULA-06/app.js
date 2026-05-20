@@ -22,10 +22,11 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 //Import das controllers do projeto
-const controllerFilme = require('./controller/filme/controller_filme.js')
-const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
-const controllerGenero = require('./controller/genero/controller_genero.js')
-const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade.js')
+const controllerFilme           = require('./controller/filme/controller_filme.js')
+const controllerClassificacao   = require('./controller/classificacao/controller_classificacao.js')
+const controllerGenero          = require('./controller/genero/controller_genero.js')
+const controllerNacionalidade   = require('./controller/nacionalidade/controller_nacionalidade.js')
+const controllerSexo            = require('./controller/sexo/controller_sexo.js')
 
 //ENDPOINTS
 
@@ -149,7 +150,7 @@ app.post('/v1/senai/locadora/genero', bodyParserJSON, async function(request, re
     let contentType = request.headers['content-type']
 
     //chama a função de inserir e encaminha os dados do filme e o contentType
-    let result = await controllerGenero.inserirNovaClassificacao(dados, contentType)
+    let result = await controllerGenero.inserirNovaGenero(dados, contentType)
     
     response.status(result.status_code)
     response.json(result)
@@ -192,6 +193,7 @@ app.delete('/v1/senai/locadora/genero/:id', async function(request,response){
     response.json(result)
 })
 
+
 //Nacionalidade
 app.post('/v1/senai/locadora/nacionalidade', bodyParserJSON, async function(request, response){
     let dados = request.body
@@ -231,6 +233,67 @@ app.put('/v1/senai/locadora/nacionalidade/:id',bodyParserJSON, async function(re
     response.json(result)
 
 })
+
+app.delete('/v1/senai/locadora/nacionalidade/:id', async function(request,response){
+    let id = request.params.id
+
+    let result = await controllerNacionalidade.excluirNacionalidade(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+//Sexo
+app.post('/v1/senai/locadora/sexo', bodyParserJSON, async function(request, response){
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerSexo.inserirNovoSexo(dados, contentType)
+    
+    response.status(result.status_code)
+    response.json(result)
+
+})
+
+app.get('/v1/senai/locadora/sexo', async function(request,response){
+    let result = await controllerSexo.listarSexo()
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/sexo/:id', async function(request,response){
+    let id = request.params.id
+    let result = await controllerSexo.buscarSexo(id)
+    response.status(result.status_code)
+    response.json(result)
+   
+})
+
+app.put('/v1/senai/locadora/sexo/:id',bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+
+    let id = request.params.id
+
+    let dados = request.body
+
+    let result = await controllerSexo.atualizarSexo(dados, id, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+
+})
+
+app.delete('/v1/senai/locadora/sexo/:id', async function(request,response){
+    let id = request.params.id
+
+    let result = await controllerSexo.excluirSexo(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
 
 //Fazer o Start na API (aguardando as requisições)
 app.listen(8080, function () {

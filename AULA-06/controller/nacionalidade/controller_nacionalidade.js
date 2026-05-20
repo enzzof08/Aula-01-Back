@@ -127,6 +127,27 @@ const atualizarNacionalidade = async function (dados, id, contentType) {
 
 }
 
+const excluirNacionalidade = async function(id){
+let customMessage = JSON.parse(JSON.stringify(configMessages))
+    try {
+        let resultBuscarNacionalidade = await buscarNacionalidade(id)
+
+        if(resultBuscarNacionalidade.status){
+            let result = await nacDAO.deleteNacionalidade(id)
+            if(result){
+                return customMessage.SUCCESS_DELETED_ITEM
+            }else{
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL
+            }
+        }else{
+            return resultBuscarNacionalidade
+        }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
 const validarDados = async function (dados) {
     let nacionalidade = dados.nacionalidade
     if (nacionalidade == undefined || nacionalidade == '' || nacionalidade == null || nacionalidade.length > 30 || !isNaN(nacionalidade)) {
@@ -148,5 +169,6 @@ module.exports = {
     inserirNovaNacionalidade,
     listarNacionalidade,
     buscarNacionalidade,
-    atualizarNacionalidade
+    atualizarNacionalidade,
+    excluirNacionalidade
 }

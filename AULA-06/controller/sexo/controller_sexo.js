@@ -1,15 +1,16 @@
-/***************************************************************************************************************
- * Objetivo: Arquivo responsável pela validação, tratamento, manipulação de dados para realizar o CRUD de genero
- * Data: 17/04/2026
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pela validação, tratamento, manipulação de dados para realizar o CRUD de sexo
+ * Data: 20/05/2026
  * Autor: Enzzo
  * Versão: 1.0
- ***************************************************************************************************************/
+ ***********************************************************************************************************************/
 
+//Import do arquivo de configurações de mensagens do projeto
 const configMessages = require('../modulo/configMessages.js')
 
-const genDAO = require('../../model/DAO/genero/genero.js')
+const sexoDAO = require('../../model/DAO/sexo/sexo.js')
 
-const inserirNovaGenero = async function (dados, contentType) {
+const inserirNovoSexo = async function (dados, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
@@ -20,16 +21,16 @@ const inserirNovaGenero = async function (dados, contentType) {
             if (validar) {
                 return validar
             } else {
-                let result = await genDAO.insertGenero(await tratarDados(dados))
+                let result = await sexoDAO.insertSexo(await tratarDados(dados))
                 if (result) {
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
                     customMessage.DEFAULT_MESSAGE.response = dados
 
-                    return customMessage.DEFAULT_MESSAGE //201
+                    return customMessage.DEFAULT_MESSAGE 
                 } else {
-                    return customMessage.ERROR_INTERNAL_SERVER_MODEL //500
+                    return customMessage.ERROR_INTERNAL_SERVER_MODEL 
                 }
             }
         } else {
@@ -38,13 +39,12 @@ const inserirNovaGenero = async function (dados, contentType) {
     } catch (error) {
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
-
 }
 
-const listarGenero = async function () {
+const listarSexo = async function () {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
     try {
-        let result = await genDAO.selectALLGenero()
+        let result = await sexoDAO.selectALLSexo()
         if (result) {
             if (result.length > 0) {
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -64,14 +64,15 @@ const listarGenero = async function () {
     }
 }
 
-const buscarGenero = async function (id) {
+
+const buscarSexo = async function (id) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
     try {
         if (id == undefined || String(id).replaceAll(' ', '') == '' || id == '' || id == null || isNaN(id) || id <= 0) {
             customMessage.ERROR_BAD_REQUEST.field = '[ID] INVÁLIDO'
             return customMessage.ERROR_BAD_REQUEST //400
         } else {
-            let result = await genDAO.selectByIdGenero(id)
+            let result = await sexoDAO.selectByIdSexo(id)
             if (result) {
                 if (result.length > 0) {
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -92,17 +93,19 @@ const buscarGenero = async function (id) {
     }
 }
 
-const atualizarGenero = async function (dados, id, contentType) {
+
+const atualizarSexo = async function (dados, id, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            let resultBuscarGenero = await buscarGenero(id)
-            if (resultBuscarGenero.status) {
+            let resultBuscarSexo = await buscarSexo(id)
+            if (resultBuscarSexo.status) {
 
                 let validar = await validarDados(dados)
                 if (!validar) {
                     dados.id = Number(id)
-                    let result = await genDAO.updateGenero(await tratarDados(dados))
+                    let result = await sexoDAO.updateSexo(await tratarDados(dados))
+
                     if (result) {
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATE_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATE_ITEM.status_code
@@ -112,6 +115,7 @@ const atualizarGenero = async function (dados, id, contentType) {
                     } else {
                         return customMessage.ERROR_INTERNAL_SERVER_MODEL
                     }
+
                 } else {
                     return validar
                 }
@@ -128,13 +132,13 @@ const atualizarGenero = async function (dados, id, contentType) {
 
 }
 
-const excluirGenero = async function(id){
+const excluirSexo = async function(id){
 let customMessage = JSON.parse(JSON.stringify(configMessages))
     try {
-        let resultBuscarGenero = await buscarGenero(id)
+        let resultBuscarSexo = await buscarSexo(id)
 
-        if(resultBuscarGenero.status){
-            let result = await genDAO.deleteGenero(id)
+        if(resultBuscarSexo.status){
+            let result = await sexoDAO.deleteSexo(id)
             if(result){
                 return customMessage.SUCCESS_DELETED_ITEM
             }else{
@@ -150,9 +154,9 @@ let customMessage = JSON.parse(JSON.stringify(configMessages))
 }
 
 const validarDados = async function (dados) {
-    let genero = dados.genero
-    if (genero == undefined || genero == '' || genero == null || genero.length > 30 || !isNaN(genero)) {
-        customMessage.ERROR_BAD_REQUEST.field = '[GENERO] INVÁLIDO'
+    let sexo = dados.sexo
+    if (sexo == undefined || sexo == '' || sexo == null || sexo.length > 30 || !isNaN(sexo)) {
+        customMessage.ERROR_BAD_REQUEST.field = '[SEXO] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
     } else {
         return false
@@ -161,17 +165,20 @@ const validarDados = async function (dados) {
 
 const tratarDados = async function (dados) {
     //Tratamento para eliminar a chegada da aspas ('') como caracter inválido
-    dados.genero = dados.genero.replaceAll("'", "")
+    dados.sexo = dados.sexo.replaceAll("'", "")
 
     return dados
 }
 
 
+
+
 module.exports = {
-    inserirNovaGenero,
-    listarGenero,
-    buscarGenero,
-    atualizarGenero,
-    excluirGenero
+    inserirNovoSexo,
+    listarSexo,
+    buscarSexo,
+    atualizarSexo,
+    excluirSexo
+
 }
 
