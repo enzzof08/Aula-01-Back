@@ -27,6 +27,7 @@ const controllerClassificacao   = require('./controller/classificacao/controller
 const controllerGenero          = require('./controller/genero/controller_genero.js')
 const controllerNacionalidade   = require('./controller/nacionalidade/controller_nacionalidade.js')
 const controllerSexo            = require('./controller/sexo/controller_sexo.js')
+const controllerAtor            = require('./controller/ator/controller_ator.js')
 
 //ENDPOINTS
 
@@ -292,6 +293,20 @@ app.delete('/v1/senai/locadora/sexo/:id', async function(request,response){
 
     response.status(result.status_code)
     response.json(result)
+})
+
+
+//Ator
+app.post('/v1/senai/locadora/ator', bodyParserJSON, async function(request, response){
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerAtor.inserirNovoAtor(dados, contentType)
+    
+    response.status(result.status_code)
+    response.json(result)
+
 })
 
 

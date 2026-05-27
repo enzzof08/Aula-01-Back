@@ -19,7 +19,7 @@ const inserirNovoFilme = async function (filme, contentType) {
 
     //Forma de criar uma cópia dos JSON do arquvio de configuração de mensagens
     let customMessage = JSON.parse(JSON.stringify(configMessages))
-    
+
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
@@ -43,17 +43,22 @@ const inserirNovoFilme = async function (filme, contentType) {
                     //Manipulação de dados para Inserir os Generos relacionados ao Filme
 
                     //Percorre o array de generos que chegará na requisição
-                    for (itemFilme of filme.genero) {
+                    for (itemGenero of filme.genero) {
 
 
                         let filmeGenero = {
                             "id_filme": filme.id,
-                            "id_genero": itemFilme.id
+                            "id_genero": itemGenero.id
                         }
 
 
                         let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
-                        //console.log(resultFilmeGenero)
+
+                        //Validação para verificar se todos os itens de relacionamento foram inseridos
+                        if (!resultFilmeGenero.status) {
+                            return customMessage.SUCCESS_CREATED_ITEM_WARNING  //201 com alerta de cadastro
+                        }
+
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
@@ -105,6 +110,31 @@ const atualizarFilme = async function (filme, id, contentType) {
                     let result = await filmeDAO.updateFilme(await tratarDados(filme))
 
                     if (result) {
+
+                        //Excluir as relações entre o Filme e os Generos (Tabela de relação)
+                        let resultDeleteGeneros = await controllerFilmeGenero.excluirGenerosIdFilme(filme.id)
+
+                        if (resultDeleteGeneros.status) {
+                            //Percorre o array de generos que chegará na requisição
+                            for (itemGenero of filme.genero) {
+
+
+                                let filmeGenero = {
+                                    "id_filme": filme.id,
+                                    "id_genero": itemGenero.id
+                                }
+
+
+                                let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+
+                                //Validação para verificar se todos os itens de relacionamento foram inseridos
+                                if (!resultFilmeGenero.status) {
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING  //201 com alerta de cadastro
+                                }
+
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATE_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATE_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATE_ITEM.message
@@ -159,7 +189,19 @@ const listarFilme = async function () {
                         //Apaga o id_classificação do JSON de filme
                         delete filme.id_classificacao
                     }
+
+                    //Manipulação de dados para retornar os Generos relacionados aos filmes
+
+                    let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+
+                    if (resultGeneros.status) {
+
+                        filme.genero = resultGeneros.response.filme_genero
+
+                    }
+
                 }
+
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
@@ -209,6 +251,15 @@ const buscarFilme = async function (id) {
                             filme.classificacao = resultClassificacao.response.classificacao
                             //Apaga o id_classificação do JSON de filme
                             delete filme.id_classificacao
+                        }
+
+                        //Manipulação de dados para retornar os Generos relacionados aos filmes
+                        let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+
+                        if (resultGeneros.status) {
+
+                            filme.genero = resultGeneros.response.filme_genero
+
                         }
                     }
 

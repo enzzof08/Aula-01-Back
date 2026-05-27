@@ -14,18 +14,27 @@ const knexDatabaseConfig = require('../../database_config/knexConfig.js')
 //Criar a conexão com o BD Mysql conforme o arquivo de configuração
 const knexConection = knex(knexDatabaseConfig.development)
 
-const insertAtor = async function (dados) {
+const insertAtor = async function (ator) {
     try {
         let sql = `insert into tbl_ator (
-            ator
+            nome,
+            data_nascimento,
+            biografia,
+            imagem,
+            id_sexo
+
         )values (
-            '${dados.ator}'
+            '${ator.nome}',
+            '${ator.data_nascimento}',
+            '${ator.biografia}',
+            '${ator.imagem}',
+            '${ator.id_sexo}'
         );`
 
         let result = await knexConection.raw(sql)
 
         if (result) {
-            return true
+            return result[0].insertId
         } else {
             return false
         }

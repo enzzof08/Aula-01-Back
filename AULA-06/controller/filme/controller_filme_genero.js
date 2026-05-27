@@ -201,6 +201,25 @@ const excluirFilmeGenero = async function (id) {
     }
 }
 
+//Função para excluir a relação de generos com o Filme
+const excluirGenerosIdFilme = async function (idFilme) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+    try {
+        
+            //Chamar a função do DAO para excluir o genero
+            let result = await filmeGenDAO.deleteGenerosByIdFilme(idFilme)
+            if (result) {
+                return customMessage.SUCCESS_DELETED_ITEM
+            } else {
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
 const validarDados = async function (filmeGenero) {
     if (filmeGenero.id_filme == undefined || filmeGenero.id_filme == '' || filmeGenero.id_filme == null || filmeGenero.id_filme <= 0 || isNaN(filmeGenero.id_filme)) {
         customMessage.ERROR_BAD_REQUEST.field = '[ID_FILME] INVÁLIDO'
@@ -228,6 +247,7 @@ module.exports = {
     atualizarFilmeGenero,
     excluirFilmeGenero,
     buscarFilmesIdGenero,
-    buscarGenerosIdFilme
+    buscarGenerosIdFilme,
+    excluirGenerosIdFilme
 }
 

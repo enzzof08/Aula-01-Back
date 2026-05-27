@@ -8,39 +8,42 @@
 //Import do arquivo de configurações de mensagens do projeto
 const configMessages = require('../modulo/configMessages.js')
 
-const atorDAO = require('../../model/DAO/ator')
+const atorDAO = require('../../model/DAO/ator/ator.js')
 
 
-// const inserirNovoAtor = async function (dados, contentType) {
-//     let customMessage = JSON.parse(JSON.stringify(configMessages))
+const inserirNovoAtor = async function (ator, contentType) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
 
-//     try {
-//         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+    try {
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-//             let validar = await validarDados(dados)
+            let validar = await validarDados(ator)
 
-//             if (validar) {
-//                 return validar
-//             } else {
-//                 let result = await sexoDAO.insertSexo(await tratarDados(dados))
-//                 if (result) {
-//                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
-//                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
-//                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
-//                     customMessage.DEFAULT_MESSAGE.response = dados
+            if (validar) {
+                return validar
+            } else {
+                let result = await atorDAO.insertAtor(await tratarDados(ator))
+                if (result) {
 
-//                     return customMessage.DEFAULT_MESSAGE 
-//                 } else {
-//                     return customMessage.ERROR_INTERNAL_SERVER_MODEL 
-//                 }
-//             }
-//         } else {
-//             return customMessage.ERROR_CONTENT_TYPE
-//         }
-//     } catch (error) {
-//         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
-//     }
-// }
+                    ator.id = result
+
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
+                    customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
+                    customMessage.DEFAULT_MESSAGE.response = ator
+
+                    return customMessage.DEFAULT_MESSAGE 
+                } else {
+                    return customMessage.ERROR_INTERNAL_SERVER_MODEL 
+                }
+            }
+        } else {
+            return customMessage.ERROR_CONTENT_TYPE
+        }
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
 
 
 const validarDados = async function (ator) {
@@ -49,7 +52,7 @@ const validarDados = async function (ator) {
     if(ator.nome == undefined || ator.nome == '' || ator.nome == null ||  ator.nome.length > 50){
         customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
-    }else if(ator.data_nascimento == undefined || ator.data_nascimento == '' || ator.data_nascimento == null ||  filme.data_lancamento.length != 10){
+    }else if(ator.data_nascimento == undefined || ator.data_nascimento == '' || ator.data_nascimento == null ||  ator.data_nascimento.length != 10){
         customMessage.ERROR_BAD_REQUEST.field = '[DATA DE NASCIMENTO] INVÁLIDA'
         return customMessage.ERROR_BAD_REQUEST
     }else if(ator.biografia == undefined ||  ator.biografia == '' || ator.biografia == null){
@@ -77,4 +80,8 @@ const tratarDados = async function(ator){
     ator.imagem             = ator.imagem.replaceAll("'", "")
 
     return ator
+}
+
+module.exports = {
+    inserirNovoAtor
 }
