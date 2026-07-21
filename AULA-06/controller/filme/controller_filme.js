@@ -53,7 +53,7 @@ const inserirNovoFilme = async function (filme, contentType) {
 
 
                         let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
-
+                        console.log(resultFilmeGenero)
                         //Validação para verificar se todos os itens de relacionamento foram inseridos
                         if (!resultFilmeGenero.status) {
                             return customMessage.SUCCESS_CREATED_ITEM_WARNING  //201 com alerta de cadastro
@@ -69,7 +69,7 @@ const inserirNovoFilme = async function (filme, contentType) {
                     return customMessage.DEFAULT_MESSAGE //201
 
                 } else { //erro 500 (Model)
-
+                    console.log(result)
                     return customMessage.ERROR_INTERNAL_SERVER_MODEL //500
                 }
 
@@ -79,6 +79,7 @@ const inserirNovoFilme = async function (filme, contentType) {
         }
 
     } catch (error) {
+        
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 
@@ -283,25 +284,35 @@ const buscarFilme = async function (id) {
 //Função para excluir um filme
 const excluirFilme = async function (id) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
+
     try {
-        //Chama a funçao de buscar filme para validar se o filme existe
         let resultBuscarFilme = await buscarFilme(id)
 
-        //Validação
         if (resultBuscarFilme.status) {
-            //Chama a função do DAO para excluir o filme
-            let result = await filmeDAO.deleteFilme(id)
 
-            if (result)
-                return customMessage.SUCCESS_DELETED_ITEM //200 ou 204
-            else
-                return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 Model
+            // Exclui os relacionamentos primeiro
+            let resultDeleteGeneros = await controllerFilmeGenero.excluirGenerosIdFilme(id)
+
+            if (resultDeleteGeneros.status) {
+
+                // Agora exclui o filme
+                let result = await filmeDAO.deleteFilme(id)
+
+                if (result)
+                    return customMessage.SUCCESS_DELETED_ITEM
+                else
+                    return customMessage.ERROR_INTERNAL_SERVER_MODEL
+
+            } else {
+                return resultDeleteGeneros
+            }
 
         } else {
             return resultBuscarFilme
         }
+
     } catch (error) {
-        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 Controller
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 

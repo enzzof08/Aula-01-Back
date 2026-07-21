@@ -43,6 +43,87 @@ const insertAtor = async function (ator) {
     }
 }
 
+const updateAtor = async function(ator){
+    try {
+            let sql = `update tbl_ator set
+                            nome             = '${ator.nome}',
+                            data_nascimento  = '${ator.data_nascimento}',
+                            biografia        = '${ator.biografia}',
+                            imagem           = '${ator.imagem}',
+                            id_sexo          = ${ator.id_sexo}
+                        where id             = ${ator.id};`
+
+    let result = await knexConection.raw(sql)
+    
+    if(result)
+        return true
+
+    else
+        return false
+
+
+    } catch (error) {
+        return false
+    }
+}
+
+const selectALLAtor = async function(){
+    try {
+       
+        let sql = 'select * from tbl_ator order by id desc'
+
+        //Executa no BD o script e guarda o retorno do BD, Pode ser um ERRO (false) Ou um Array com os dados
+        let result = await knexConection.raw(sql)
+
+        //Validação para verificar se o retorno do BD é um Array ou um Boolean (False)
+        if(Array.isArray(result)){
+            return result[0]  //Retorna somente o indice com a lista
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
+}
+
+const selectByIdAtor = async function(id){
+    try {
+        let sql = `select * from tbl_ator where id=${id}`
+
+        let result = await knexConection.raw(sql)
+        
+        if(Array.isArray(result)){
+            return result[0]
+        }else{
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+const deleteAtor = async function(id){
+    try {
+        let sql = `delete from tbl_ator where id=${id}`
+
+        let result = await knexConection.raw(sql)
+        
+        if(result)
+            return true
+        else
+            return false
+
+    } catch (error) {
+        
+        return false
+    }
+}
+
 module.exports = {
-    insertAtor
+    insertAtor,
+    updateAtor,
+    selectALLAtor,
+    selectByIdAtor,
+    deleteAtor
 }

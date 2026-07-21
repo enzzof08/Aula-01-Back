@@ -77,7 +77,7 @@ const buscarSexo = async function (id) {
                 if (result.length > 0) {
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
-                    customMessage.DEFAULT_MESSAGE.response.genero = result
+                    customMessage.DEFAULT_MESSAGE.response.sexo = result[0].sexo
 
                     return customMessage.DEFAULT_MESSAGE
                 } else {

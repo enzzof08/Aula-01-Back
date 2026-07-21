@@ -30,6 +30,7 @@ const insertFilmeGenero = async function (filmeGenero) {
         }
 
     } catch (error) {
+        console.log(error)
         return false
     }
 }
